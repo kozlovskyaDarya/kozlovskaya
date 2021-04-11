@@ -1,38 +1,47 @@
 <?php
 
-class A
-{
-}
+use kozlovskaya\kozlovskayaException;
+use kozlovskaya\QuEquation;
+use kozlovskaya\MyLog;
 
-class B extends A
-{
-	public function __construct ($b)
-	{
-		$this->b = $b;
-	}
+include "core/EquationInterface.php";
+include "core/LogAbstract.php";
+include "core/LogInterface.php";
+include "kozlovskaya/MyLog.php";
+include "kozlovskaya/Equation.php";
+include "kozlovskaya/QuEquation.php";
+include "kozlovskaya/kozlovskayaException.php";
 
-	protected $b;
-}
+ini_set("display_errors", 1);
+error_reporting(-1);
 
-class C extends B
-{
-    public function __construct ($a, $b, $c)
-    {
-        $this->c = $c;
-        $this->a = $a;
-        parent::__construct($b);
+$b = new QuEquation();
+
+try {
+	$version = file_get_contents("version");
+	MyLog::log("Версия программы ".$version);
+
+$values = array();
+
+    for ($i = 1; $i<4; $i++){
+    echo "Введите " .$i."аргумент : ";
+
+    $values[] = readline();
     }
 
-    protected $c;
-    protected $a;
+ $va = $values[0];
+    $vb = $values[1];
+    $vc = $values[2];
+
+MyLog::log("Введено уравнение ".$va. "x^2 +  ".$vb."x + ".$vc);
+    $x = $b->l_solve($va, $vb, $vc);
+
+$str = implode(", ", $x);
+    MyLog::log("Корни уравнения: ".$str);
 }
-
-$a1 = new A();
-$a2 = new A();
-$a3 = new A();
-$b4 = new B($a2);
-$c5 = new C($a1, $a3, $b4);
-
-var_dump ($c5);
+catch(kozlovskayaException $e){
+    MyLog::log($e->getMessage());
+}
+MyLog::write();
 
 ?> 

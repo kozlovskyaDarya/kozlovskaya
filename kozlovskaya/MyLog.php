@@ -16,15 +16,27 @@ Class MyLog extends LogAbstract implements LogInterface {
     
     public function _write(){
         
-        for($i=0; $i<sizeof($this->log);$i++){
+        $d = new DateTime();
+$filename = "log/".$d->format('d.m.Y_T_H.i.s.u').".log";
+
+if(!(is_dir("log"))){
+mkdir("log", 0777, true);
+}
+
+$logfile = "";
+
+ for ($i = 0; $i < sizeof($this->log); $i++) {
             echo $this->log[$i]."\n";
+			$logfile .= $value."\r\n";
         }
         
-    }
+    file_put_contents($filename, $logfile, FILE_APPEND);
+
+
+}
     
     public static function write(){
-        MyLog::Instance()->_write();
-
+       
     }
 
 
